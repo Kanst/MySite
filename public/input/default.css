@@ -1,0 +1,242 @@
+/*
+	Design by Free CSS Templates
+	http://www.freecsstemplates.org
+	Released for free under a Creative Commons Attribution 2.5 License
+*/
+
+/* Basic */
+
+*
+{
+	margin: 0em;
+	padding: 0em;
+}
+
+h1,h2,h3,h4,h5,h6
+{
+	text-transform: uppercase;
+	letter-spacing: 0.2em;
+}
+
+body
+{
+	font-family: "trebuchet ms", sans-serif;
+	font-size: 10pt;
+	background-color: #000000;
+	color: #6F5129;
+}
+
+a
+{
+	color: #667700;
+	text-decoration: underline;
+}
+
+a:hover
+{
+	text-decoration: none;
+}
+
+/* Outer */
+
+#outer
+{
+	width: 778px;
+	margin: 2em auto;
+}
+
+/* Header */
+
+#header
+{
+	padding: 1.75em;
+	text-align: center;
+}
+
+#header h1
+{
+	font-size: 2em;
+}
+
+#header h2
+{
+	font-size: 1em;
+	color: #747474;
+}
+
+#header h1 a
+{
+	color: #fff;
+	text-decoration: none;
+}
+
+/* Menu */
+
+#menu
+{
+	background: #000000 url('images/a1.jpg') top left no-repeat;
+	height: 94px;
+	width: 778px;
+}
+
+#menu ul
+{
+	list-style: none;
+	text-align: center;
+	position: relative;
+	top: 45px;
+}
+
+#menu li
+{
+	padding: 0em 1.5em 0em 1.5em;
+	display: inline;
+}
+
+#menu li a
+{
+	color: #3A2000;
+	font-weight: bold;
+	text-transform: uppercase;
+	text-decoration: none;
+	font-size: 0.9em;
+	letter-spacing: 0.2em;
+}
+
+#menu li a:hover
+{
+	text-decoration: underline;
+}
+
+/* Content */
+
+#xbg1
+{
+	position: absolute;
+	z-index: 1;
+	background: #000000 url('images/a2.jpg') top left no-repeat;
+	width: 778px;
+	height: 98px;
+}
+
+#content
+{
+	background: #000000 url('images/a3.jpg') top left repeat-y;
+}
+
+#content p
+{
+	margin-bottom: 2em;
+	line-height: 1.5em;
+}
+
+#content h2,h3,h4,h5,h6
+{
+	position: relative;
+	color: #3F2109;
+	margin-bottom: 1em;
+	padding-bottom: 0.5em;
+	border-bottom: solid 1px #DFBF99;
+}
+
+#content h2
+{
+	font-size: 1.5em;
+}
+
+#content h3
+{
+	font-size: 1.1em;
+}
+
+#content ul
+{
+	margin-bottom: 2em;
+	padding-left: 1em;
+}
+
+#content blockquote
+{
+	margin-bottom: 2em;
+}
+
+#content blockquote p
+{
+	border-left: solid 8px #667700;
+	padding-left: 1em;
+	margin-bottom: 0em;
+}
+
+#content table
+{
+	margin-bottom: 2em;
+}
+
+#content table th
+{
+	text-align: left;
+	font-weight: bold;
+	padding: 0.5em;
+}
+
+#content table td
+{
+	padding: 0.5em;
+}
+
+#content table tr.rowA
+{
+	background-color: #DFBD99;
+	color: inherit;
+}
+
+#content table tr.rowB
+{
+	background-color: #EFDCC2;
+	color: inherit;
+}
+
+/* Primary Content */
+
+#primaryContentContainer
+{
+	position: relative;
+	z-index: 2;
+	float: right;
+	margin-left: -18em;
+	width: 100%;
+}
+
+#primaryContent
+{
+	margin: 2em 3.0em 0em 19em;
+	padding: 0em 0em 0em 1.5em;
+	border-left: solid 1px #DFBF99;
+}
+
+/* Secondary Content */
+
+#secondaryContent
+{
+	position: relative;
+	z-index: 2;
+	float: right;
+	width: 15em;
+	margin-top: 2em;
+}
+
+/* Footer */
+
+#footer
+{
+	width: 778px;
+	height: 56px;
+	padding-top: 30px;
+	background: #000000 url('images/a4.jpg') top left no-repeat;
+	text-align: center;
+}
+
+.clear
+{
+	clear: both;
+}

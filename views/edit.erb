@@ -1,0 +1,42 @@
+  <div id="content">
+    <div id="xbg1"></div>
+    <div id="primaryContentContainer">
+      <div id="primaryContent">
+        
+<% if @title %>
+  <h1><%= @title %></h1>
+  <pre><%= params[:text] %></pre>
+<% end %>
+
+<hr>
+
+<form for="/" method="post">
+  <% if  params[:title] != nil %>
+    Title: <input type="text" disabled value="<%=  params[:title] %>" >
+  <% else %>
+    Title: <input type="text" name="title">
+  <% end %>
+  <br>
+  <br>
+  Content:
+
+  <br>
+  <% if params[:text] != nil %>
+  <textarea name="text" style="width:460px; height: 300px" ><%= params[:text] %></textarea>
+  <% else %>
+  <textarea name="text" style="width:460px; height: 300px"><%= @text %></textarea>
+  <% end %>
+  <br>
+  <input type="submit" name="sm1" value="Предварительный просмотр">
+  <input type="submit" name="go1" value="Сохранить">
+</form>
+      </div>
+    </div>
+    <div id="secondaryContent">
+      <h3>Редактирование книги</h3>
+      <!-- <p>вот она. <a href="http://bash.org.ru/abyssbest">More&#8230;</a></p> -->
+      
+      </ul>
+    </div>
+    <div class="clear"></div>
+  </div>
