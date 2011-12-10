@@ -1,0 +1,30 @@
+    <div id="primaryContentContainer">
+      <div id="primaryContent">
+        <p align="center"><img width="200" 
+    height="300" src="http://s3.amazonaws.com/Image_Books/<%= params[:kniga] %>.jpg" alt="С кагого то фига обложка не загрузилась"></p>
+        <h1><p align="center"><%= @bookss_name %></p></h1>
+        <span><%= @bookss_text %></span>
+        <br>
+        <br>
+        <p><a href="https://s3.amazonaws.com/STALKER_RAR/<%= params[:kniga] %>.rar ">Скачать в fb2 <%= @bookss_name %></a></p>
+        
+      </div>
+    </div>
+    <div id="secondaryContent">
+      Login: <input type="text" style="width:150px; height: 20px" name="login" >
+      Password: <input type="text" style="width:130px; height: 20px" name="password" >
+      <input type="submit" name="reg" value="Регистрация">
+        <input type="submit" align="center" name="vhod" value="Войти">
+        <p><%= @error %></p>
+        <br>
+        <br>
+        <hr>
+      <h3>Серия книг по вселенной S.T.A.L.K.E.R.</h3>
+      <p>Список книг <a href="/books/spisok_ST">S.T.A.L.K.E.R</a></p>
+      <p>Книги из серии <a href="/books/">S.T.A.L.K.E.R</a></p>
+      <p>Фаники по <a href="/books/">S.T.A.L.K.E.R</a></p>
+      </ul>
+    </div>
+    <div class="clear"></div>
+
+ 

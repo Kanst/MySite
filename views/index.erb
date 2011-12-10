@@ -1,6 +1,3 @@
-
-  <div id="content">
-    <div id="xbg1"></div>
     <div id="primaryContentContainer">
       <div id="primaryContent">
         <h2>Добро пожаловать на мою страницу</h2>
@@ -20,12 +17,30 @@
         
       </div>
     </div>
+    <form for="/" method="post">
     <div id="secondaryContent">
+      <% if params[:login] != nil %>
+      Login: <input type="text" style="width:150px; height: 20px" name="login" value = "<%= params[:login] %>" >
+      <% else %>
+      Login: <input type="text" style="width:150px; height: 20px" name="login"  >
+      <% end %>
+      <% if params[:passwd] != nil %>
+      Password: <input type="text" style="width:130px; height: 20px" name="password" value = "<%= params[:passwd] %>">
+      <% else %>
+      Password: <input type="text" style="width:130px; height: 20px" name="password">
+      <% end %>
+      <input type="submit" name="reg" value="Регистрация">
+        <input type="submit"  name="vhod" value="Войти">
+        <p><%= @error %></p>
+        <br>
+        <br>
+        <hr>
       <h3>Тут будет хрень</h3>
       <p>вот она. <a href="http://bash.org.ru/abyssbest">More&#8230;</a></p>
       
       </ul>
     </div>
+    </form>
     <div class="clear"></div>
-  </div>
+ 
  

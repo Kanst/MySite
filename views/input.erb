@@ -1,12 +1,11 @@
-  <div id="content">
-    <div id="xbg1"></div>
     <div id="primaryContentContainer">
       <div id="primaryContent">
         
         <% if @title %>
-  <h1><%= @title %></h1>
-  <pre><%= @text %></pre>
-<% end %>
+           <h1><p align="center"><%= params[:name] %></p></h1>
+           <br>
+           <pre><%= @text %></pre>
+        <% end %>
 
 <hr>
 
@@ -16,6 +15,13 @@
   value="<%= params[:title] %>" >
   <% else %>
     Title: <input type="text" name="title">
+  <% end %>
+  <br>
+  <br>
+   <% if params[:name] != nil %>
+    Name: <input type="text" name="name" value="<%= params[:name] %>">
+  <% else %>
+    Name: <input type="text" name="name">
   <% end %>
   <br>
   <br>
@@ -33,10 +39,17 @@
       </div>
     </div>
     <div id="secondaryContent">
+      Login: <input type="text" style="width:150px; height: 20px" name="login" >
+      Password: <input type="text" style="width:130px; height: 20px" name="password" >
+      <input type="submit" name="reg" value="Регистрация">
+        <input type="submit" align="center" name="vhod" value="Войти">
+        <p><%= @error %></p>
+        <br>
+        <br>
+        <hr>
       <h3>Добавление книги</h3>
       <!-- <p>вот она. <a href="http://bash.org.ru/abyssbest">More&#8230;</a></p> -->
       
       </ul>
     </div>
     <div class="clear"></div>
-  </div>
