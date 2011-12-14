@@ -6,13 +6,18 @@ require 'unicode_utils/downcase'
 require 'digest/sha2'
 
 
-def get_title(title = @title)
-  
+  enable :sessions
+
+
+
+
+
+
+def get_title(title = @title)  
   if @title == nil
    @title1 = 'Страница не найдена'
       erb :ru_404  
-  end
-  
+  end 
 end
 
 def time()
@@ -51,23 +56,6 @@ else
   end
 end
 end
-# get '/*' do 
-# 	t0=Time.now
-# 	t1=Time.local(2011,12,29)
-# 	t2=Time.local(2012,01,12)
-# 	sec0=t1-t0
-# 	sec1=sec0.round
-# 	se0=t2-t0
-# 	se1=se0.round
-# 	@dni=(((sec1/60)/60))/24
-# 	@dni2=(((sec1/60)/60))
-# 	@dni3=(((sec1/60)))
-# 	@dn=(((se1/60)/60))/24
-# 	@dn2=(((se1/60)/60))
-# 	@dn3=(((se1/60)))
-# 	get_title()
-	
-# end
 
 get '*/input/:title' do 
   @title = params[:title]
@@ -80,14 +68,14 @@ post '*/input/:title' do
   input = Redis.new
   @title = params[:title]
   @name = params[:name]
-  @text = params[:text]
-  
+  @text = params[:text]  
   if params[:sm]
     erb :input
   else 
     if params[:go]
       input.set "#{@title}:name", "#{@name}" 
       input.set "#{@title}:text", "#{@text}" 
+      input.set "#{@title}", "#{@title}" 
       erb :done
     else
      erb :ru_404
@@ -114,6 +102,7 @@ post '*/edit/:title' do
     if params[:go1]
       edit.set "#{@title}:name", "#{params[:name]}" 
       edit.set "#{@title}:text", "#{params[:text]}"  
+      edit.set "#{@title}", "#{params[:title]}" 
       erb :done2
     else
      erb :ru_404
@@ -129,7 +118,7 @@ def in_basa(knigaa)
     erb :spisok_ST
   else
     if params[:kniga] == "spisok_ST"
-      @bookss = prov.get "spisok_ST"
+      @bookss = prov.get "spisok_ST:text"
       erb :spisok_ST
     else
       @bookss_name = prov.get "#{knigaa}:name"
@@ -144,9 +133,7 @@ get '/books' do
 end
 
 get '/books/:kniga' do
- 
-    in_basa(params[:kniga])
-    
+    in_basa(params[:kniga])   
 end
 
 get '/products' do
@@ -157,23 +144,22 @@ end
 def hash_redis(log , passwd)
   @log=log
   @passwd=passwd
-if ((@log != nil ) or  (@passwd != nil))
-user = Redis.new
-salt = SecureRandom.urlsafe_base64
-hash = Digest::SHA2.hexdigest(passwd + salt)
-salt_prov = user.get "users:#{log}:salt"
-hash_prov = user.get "users:#{log}:hash"
-  if (hash_prov == nil)
-    user.set "users:#{log}:salt","#{salt}"
-    user.set "users:#{log}:hash", "#{hash}"
-    @error = "Регистрация успешна"
-   else
-     @error = "Пользователь с таким именем уже зареген"
-   end 
-else
- @error = "Логин или пароль не введены"
-end
-
+    if (log.length > 3) and (passwd.length > 3)
+      user = Redis.new
+      salt = SecureRandom.urlsafe_base64
+      hash = Digest::SHA2.hexdigest(passwd + salt)
+      salt_prov = user.get "users:#{log}:salt"
+      hash_prov = user.get "users:#{log}:hash"
+        if (hash_prov == nil)
+          user.set "users:#{log}:salt","#{salt}"
+          user.set "users:#{log}:hash", "#{hash}"
+          @error = "Регистрация успешна"
+        else
+           @error = "Пользователь с таким именем уже зареген"
+        end 
+    else
+       @error = "Логин или пароль не введены(или не соблюдены условия)"
+    end
 end
 
 def redis_hash(log , passwd)
@@ -188,7 +174,9 @@ if (pro_salt != nil) and (pro_hash != nil)
   hash = Digest::SHA2.hexdigest(passwd + salt)
   hash_prov = user.get "users:#{log}:hash"
   if hash == hash_prov
+    session[:login] = params[:login]
     @error = "Вход выполнен"
+    redirect '/'
   else
     @error = "Пароль неверный"
   end
@@ -196,3 +184,5 @@ else
   @error = "Пользователь несуществует" 
 end
 end  
+
+
