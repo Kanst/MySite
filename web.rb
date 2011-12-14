@@ -133,7 +133,7 @@ get '/books' do
 end
 
 get '/books/:kniga' do
-    in_basa(params[:kniga])   
+  in_basa(params[:kniga])   
 end
 
 get '/products' do
@@ -141,18 +141,18 @@ get '/products' do
 end
 
 
-def hash_redis(log , passwd)
-  @log=log
+def hash_redis(login , passwd)
+  @log=login
   @passwd=passwd
-    if (log.length > 3) and (passwd.length > 3)
+    if (login.length > 3) and (passwd.length > 3)
       user = Redis.new
       salt = SecureRandom.urlsafe_base64
       hash = Digest::SHA2.hexdigest(passwd + salt)
-      salt_prov = user.get "users:#{log}:salt"
-      hash_prov = user.get "users:#{log}:hash"
+      salt_prov = user.get "users:#{login}:salt"
+      hash_prov = user.get "users:#{login}:hash"
         if (hash_prov == nil)
-          user.set "users:#{log}:salt","#{salt}"
-          user.set "users:#{log}:hash", "#{hash}"
+          user.set "users:#{login}:salt","#{salt}"
+          user.set "users:#{login}:hash", "#{hash}"
           @error = "Регистрация успешна"
         else
            @error = "Пользователь с таким именем уже зареген"
@@ -162,27 +162,32 @@ def hash_redis(log , passwd)
     end
 end
 
-def redis_hash(log , passwd)
-user = Redis.new
-@log=log
-@passwd=passwd
-pro_salt = user.get "users:#{log}:salt"
-pro_hash = user.get "users:#{log}:hash"
-if (pro_salt != nil) and (pro_hash != nil)
+def redis_hash(login , passwd)
   user = Redis.new
-  salt = user.get "users:#{log}:salt"
-  hash = Digest::SHA2.hexdigest(passwd + salt)
-  hash_prov = user.get "users:#{log}:hash"
-  if hash == hash_prov
-    session[:login] = params[:login]
-    @error = "Вход выполнен"
-    redirect '/'
-  else
-    @error = "Пароль неверный"
-  end
-else
-  @error = "Пользователь несуществует" 
-end
+  @log=login
+  @passwd=passwd
+  pro_salt = user.get "users:#{login}:salt"
+  pro_hash = user.get "users:#{login}:hash"
+    if (pro_salt != nil) and (pro_hash != nil)
+      user = Redis.new
+      salt = user.get "users:#{login}:salt"
+      hash = Digest::SHA2.hexdigest(passwd + salt)
+      hash_prov = user.get "users:#{login}:hash"
+        if hash == hash_prov
+          if (user.get "users:#{login}:token" == nil)
+            token = SecureRandom.urlsafe_base64
+            session[:log] = params[:log] 
+            session[:token] = params[:token] 
+            user.set "users:#{login}:token", "#{session[:token]}"
+          end
+          @error = "Вход выполнен"
+          redirect '/'
+        else
+          @error = "Пароль неверный"
+        end
+    else
+      @error = "Пользователь несуществует" 
+    end
 end  
 
 
