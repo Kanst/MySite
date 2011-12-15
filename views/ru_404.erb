@@ -1,5 +1,31 @@
-<title><%= @title1 ? @title1 : '' %></title>
-Страница не найдена.
-<p>НО!</p>
- <p>Осталось дней до ТОЭ: <strong><%= @dni ? @dni : '' %></strong>  или <strong><%= @dni2 ? @dni2 : '' %></strong>  часов или <strong><%= @dni3 ? @dni3 : '' %></strong> минут</p>
+    <div id="primaryContentContainer">
+      <div id="primaryContent">
+        <h1>Страница не найдена</h1>
+        <hr>
+        <br>
+        <p>Осталось дней до ТОЭ: <strong><%= @dni ? @dni : '' %></strong>  или <strong><%= @dni2 ? @dni2 : '' %></strong>  часов или <strong><%= @dni3 ? @dni3 : '' %></strong> минут</p>
         <p>Осталось дней до ФИЗИКИ: <strong><%= @dn ? @dn : '' %></strong> или <strong><%= @dn2 ? @dn2 : '' %></strong>  часов  или <strong><%= @dn3 ? @dn3 : '' %></strong> минут</p>
+       
+        <h3>Контактная информация</h3>
+        <ul>
+          <li><a href="http://vkontakte.ru/kanst9">Vkontakte.ru.</a></li>
+          <li><a href="https://github.com/Kanst">GitHub.</a></li>
+        </ul>
+        <h3>Почта</h3>
+        <blockquote>
+          <p>kanst9@bmstu.me</p>
+          <p>jeka@kanst9.com</p>
+        </blockquote>
+        
+      </div>
+    </div>
+    <form for="/" method="post">
+    <div id="secondaryContent">
+      <%= erb :reg %>
+      <h3>Тут будет хрень</h3>
+      <p>вот она. <a href="http://bash.org.ru/abyssbest">More&#8230;</a></p>
+      
+      </ul>
+    </div>
+    </form>
+    <div class="clear"></div>

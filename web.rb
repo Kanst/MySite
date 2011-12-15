@@ -9,10 +9,6 @@ require 'digest/sha2'
   enable :sessions
 
 
-
-
-
-
 def get_title(title = @title)  
   if @title == nil
    @title1 = 'Страница не найдена'
@@ -42,25 +38,33 @@ get '/' do
 end
 
 post '/' do
-@login = params[:login]
-@password = params[:password]
-if params[:reg]
-  hash_redis(@login,@password)
-  time()
-  erb :index
-else
-  if params[:vhod]
-    redis_hash(@login,@password)
-    time()
-    erb :index
-  end
-end
+  @login = params[:login]
+  @password = params[:password]
+    if params[:reg]
+      hash_redis(@login,@password)
+      time()
+      erb :index
+    else
+      if params[:vhod]
+        redis_hash(@login,@password)
+        time()
+        erb :index
+      else
+        if params[:out] 
+          session[:login] = nil
+          session[:token] = nil
+          time()
+          erb :index
+        end
+      end
+    end
 end
 
 get '*/input/:title' do 
   @title = params[:title]
   @name = params[:name]
   @text = params[:text]
+  prov_admin(session[:login])
   erb :input
 end
 
@@ -108,6 +112,7 @@ post '*/edit/:title' do
      erb :ru_404
    end
   end
+
 end
 
 def in_basa(knigaa)
@@ -132,6 +137,29 @@ get '/books' do
   erb :books
 end
 
+post '/books' do
+@login = params[:login]
+  @password = params[:password]
+    if params[:reg]
+      hash_redis(@login,@password)
+      time()
+      erb :books
+    else
+      if params[:vhod]
+        redis_hash(@login,@password)
+        time()
+        erb :books
+      else
+        if params[:out] 
+          session[:login] = nil
+          time()
+          session[:token] = nil
+          erb :books
+        end
+      end
+    end
+end
+
 get '/books/:kniga' do
   in_basa(params[:kniga])   
 end
@@ -139,6 +167,29 @@ end
 get '/products' do
   erb :products
 end
+
+post '/products' do
+@login = params[:login]
+  @password = params[:password]
+    if params[:reg]
+      hash_redis(@login,@password)
+      time()
+      erb :products
+    else
+      if params[:vhod]
+        redis_hash(@login,@password)
+        time()
+        erb :products
+      else
+        if params[:out] 
+          session[:login] = nil
+          session[:token] = nil
+          erb :products
+        end
+      end
+    end
+end
+
 
 
 def hash_redis(login , passwd)
@@ -174,14 +225,14 @@ def redis_hash(login , passwd)
       hash = Digest::SHA2.hexdigest(passwd + salt)
       hash_prov = user.get "users:#{login}:hash"
         if hash == hash_prov
-          if (user.get "users:#{login}:token" == nil)
-            token = SecureRandom.urlsafe_base64
-            session[:log] = params[:log] 
-            session[:token] = params[:token] 
-            user.set "users:#{login}:token", "#{session[:token]}"
-          end
+          #if (user.get "users:#{login}:token" == nil)
+            token = Digest::SHA2.hexdigest(hash_prov)
+            session[:login] = params[:login] 
+            session[:token] = token 
+            user.set "users:#{login}:token", "#{token}"
+          #end
           @error = "Вход выполнен"
-          redirect '/'
+          #redirect '/'
         else
           @error = "Пароль неверный"
         end
@@ -191,3 +242,12 @@ def redis_hash(login , passwd)
 end  
 
 
+def prov_admin(login_prov)
+  user = Redis.new
+  proverka = user.get "users:#{login_prov}:admin"
+    if proverka == "yes"
+      prov_admin = true
+    else
+      prov_admin = false
+    end
+end

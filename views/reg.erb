@@ -1,0 +1,24 @@
+<% if session[:token] == nil %>
+  <% if params[:login] != nil %>
+        Login: <input type="text" style="width:150px; height: 20px" name="login" value = "<%= params[:login] %>" >
+  <% else %>
+    Login: <input type="text" style="width:150px; height: 20px" name="login"  >
+  <% end %>
+        <% if params[:passwd] != nil %>
+        Password: <input type="password" style="width:130px; height: 20px" name="password" value = "<%= params[:passwd] %>">
+        <% else %>
+        Password: <input type="password" style="width:130px; height: 20px" name="password">
+        <% end %>
+        <input type="submit" name="reg" value="Регистрация">
+          <input type="submit"  name="vhod" value="Войти">
+          <p><%= @error %></p>
+          <br>
+          <br>
+          <hr>
+<% else %>
+Здравствуй: <h1><%= session[:login] %></h1>
+<input type="submit" name="out" value="Выход">
+<br>
+<br>
+<hr>
+<% end %>
