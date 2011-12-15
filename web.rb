@@ -4,10 +4,17 @@ require 'sinatra'
 require 'redis'
 require 'unicode_utils/downcase'
 require 'digest/sha2'
+enable :sessions
 
 
-  enable :sessions
-
+def connect_redis
+  if ENV['REDISTOGO_URL'] == nil
+    Redis.new
+  else
+    uri = URI.parse(ENV['REDISTOGO_URL'])
+    Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
+  end
+end
 
 def get_title(title = @title)  
   if @title == nil
@@ -69,7 +76,7 @@ get '*/input/:title' do
 end
 
 post '*/input/:title' do
-  input = Redis.new
+  input = connect_redis
   @title = params[:title]
   @name = params[:name]
   @text = params[:text]  
@@ -88,7 +95,7 @@ post '*/input/:title' do
 end
 
 get '*/edit/:title' do 
-  edit = Redis.new
+  edit = connect_redis
   @title = params[:title]
   @text = edit.get "#{@title}:text"
   @name = edit.get "#{@title}:name"
@@ -96,7 +103,7 @@ get '*/edit/:title' do
 end
 
 post '*/edit/:title' do
-  edit = Redis.new
+  edit = connect_redis
   @title = params[:title]
   @text = edit.get "#{@title}:text"
   @name = edit.get "#{@title}:name"
@@ -116,7 +123,7 @@ post '*/edit/:title' do
 end
 
 def in_basa(knigaa)
-  prov = Redis.new
+  prov = connect_redis
   @bookss = prov.get "#{knigaa}"
   if @bookss == nil
     @bookss = "Запрошенная книга не существует или не добавлена"
@@ -196,7 +203,7 @@ def hash_redis(login , passwd)
   @log=login
   @passwd=passwd
     if (login.length > 3) and (passwd.length > 3)
-      user = Redis.new
+      user = connect_redis
       salt = SecureRandom.urlsafe_base64
       hash = Digest::SHA2.hexdigest(passwd + salt)
       salt_prov = user.get "users:#{login}:salt"
@@ -214,13 +221,13 @@ def hash_redis(login , passwd)
 end
 
 def redis_hash(login , passwd)
-  user = Redis.new
+  user = connect_redis
   @log=login
   @passwd=passwd
   pro_salt = user.get "users:#{login}:salt"
   pro_hash = user.get "users:#{login}:hash"
     if (pro_salt != nil) and (pro_hash != nil)
-      user = Redis.new
+      user = connect_redis
       salt = user.get "users:#{login}:salt"
       hash = Digest::SHA2.hexdigest(passwd + salt)
       hash_prov = user.get "users:#{login}:hash"
@@ -243,7 +250,7 @@ end
 
 
 def prov_admin(login_prov)
-  user = Redis.new
+  user = connect_redis
   proverka = user.get "users:#{login_prov}:admin"
     if proverka == "yes"
       prov_admin = true
