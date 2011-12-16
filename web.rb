@@ -135,6 +135,7 @@ def in_basa(knigaa)
     else
       @bookss_name = prov.get "#{knigaa}:name"
       @bookss_text = prov.get "#{knigaa}:text"
+      in_massiv(params[:kniga])
       erb :antonacia
     end
   end
@@ -168,7 +169,14 @@ post '/books' do
 end
 
 get '/books/:kniga' do
-  in_basa(params[:kniga])   
+  in_basa(params[:kniga]) 
+   
+end
+
+post '/books/:kniga' do
+
+  staty = params[:kniga]
+  input_komment(staty)
 end
 
 get '/products' do
@@ -192,12 +200,78 @@ post '/products' do
           session[:login] = nil
           session[:token] = nil
           erb :products
-        end
+        end    
       end
     end
 end
 
+def input_komment(staty)
+  if params[:comments]
+    input = connect_redis
+    get_kom = input.get "komment:#{staty}:kolvo"
+    if get_kom == nil 
+      input.set "komment:#{staty}:kolvo", "0"
+      n = 0;
+      t0 = Time.now
+      input.set "komment:#{staty}:num#{n}:text", "#{params[:com_text]}"
+      input.set "komment:#{staty}:num#{n}:login", "#{session[:login]}"
+      input.set "komment:#{staty}:num#{n}:time", "#{t0}"
+      #erb :antonacia
+      in_basa(staty) 
+    else
+      n = get_kom.to_i
+      n = n+1
+      input.set "komment:#{staty}:kolvo", "#{n}"
+      input.set "komment:#{staty}:num#{n}:text", "#{params[:com_text]}"
+      input.set "komment:#{staty}:num#{n}:login", "#{session[:login]}"
+      input.set "komment:#{staty}:num#{n}:time", "#{t0}"
+      #erb :antonacia
+      in_basa(staty) 
+    end    
+  else 
+    @login = params[:login]
+    @password = params[:password]
+    if params[:reg]
+      hash_redis(@login,@password)
+      time()
+      in_basa(staty)
+    else
+      if params[:vhod]
+        redis_hash(@login,@password)
+        in_basa(staty)
+      else
+        if params[:out] 
+          session[:login] = nil
+          session[:token] = nil
+          in_basa(staty)
+        end
+      end
+    end
+end
+end
 
+
+def in_massiv(staty1)
+  in_mas = connect_redis
+  #кол-во комментов
+  @k = in_mas.get "komment:#{staty1}:kolvo"
+  if @k != nil
+    #преобразуем в интегер
+    @k = @k.to_i
+    #создаем массивы
+    @arr_text = Array.new
+    @arr_login = Array.new
+    #@arr_time = Array.new(k)
+    #заполняем их
+    i = 0
+      while i <= @k do
+      @arr_text.push(in_mas.get"komment:#{staty1}:num#{i}:text")
+      @arr_login.push(in_mas.get"komment:#{staty1}:num#{i}:login")
+      #@arr_time.push(in_mas.get"komment:#{staty1}:num#{i}:time")
+      i = i+1
+      end
+  end
+end
 
 def hash_redis(login , passwd)
   @log=login

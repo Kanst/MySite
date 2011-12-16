@@ -1,3 +1,5 @@
+  <form for="/books/<%= params[:kniga] %>" method="post">
+    
     <div id="primaryContentContainer">
       <div id="primaryContent">
         <p align="center"><img width="200" 
@@ -7,7 +9,26 @@
         <br>
         <br>
         <p><a href="https://s3.amazonaws.com/STALKER_RAR/<%= params[:kniga] %>.rar ">Скачать в fb2 <%= @bookss_name %></a></p>
-        
+        <hr>
+        <br>
+      <% if @k != nil %>
+      <% i = 0 %>
+      <% while i <= @k do %>
+      
+      <b><u><font  size="4"><%= @arr_login[i] %></font></u></b> написал(а)
+      <br>
+      <i><font  size="4"><%= @arr_text[i] %></font></i>
+      <hr>
+      <hr>
+      <% i+=1 %>
+      
+      <% end %>
+      <% end %>
+        <!-- <p>Всего комментариев: </p> -->
+        <textarea name="com_text" style="width:460px; height: 100px" ></textarea>
+        <p align=right><input type="submit" name="comments" value="Добавить коментарий"></p>
+       
+
       </div>
     </div>
     <div id="secondaryContent">
@@ -19,5 +40,5 @@
       </ul>
     </div>
     <div class="clear"></div>
-
+ </form>
  
