@@ -16,8 +16,8 @@
       <% while i <= @k do %>
       <b><u><font  size="4"><%= @arr_login[i] %></font></u></b> написал(а) (<%= @arr_time[i] %>)
       <br>
-      <!-- <span><i><font  size="4"><%=  @arr_text[i] %></font></i></span> -->
-       <%= RedCloth.new("p=. __#{@arr_text[i]}__", [:filter_html]).to_html %> 
+      <span><i><font  size="4"><%=  @arr_text[i] %></font></i></span>
+     <!-- <%= RedCloth.new("p=. __#{@arr_text[i]}__", [:filter_html]).to_html %>  -->
       <hr>
       <hr>
       <% i+=1 %>
