@@ -4,14 +4,14 @@ require 'sinatra'
 require 'redis'
 require 'unicode_utils/downcase'
 require 'digest/sha2'
+require 'RedCloth'
 enable :sessions
-
 
 def connect_redis
   if ENV['REDISTOGO_URL'] == nil
     Redis.new
   else
-    uri = URI.parse(ENV['REDISTOGO_URL'])
+    uri =  URI.parse(ENV['REDISTOGO_URL'])
     Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
   end
 end
@@ -212,19 +212,23 @@ def input_komment(staty)
     if get_kom == nil 
       input.set "komment:#{staty}:kolvo", "0"
       n = 0;
-      t0 = Time.now
+      t1 = Time.now
+      params[:com_text] = RedCloth.new("#{params[:com_text]}", [:filter_html]).to_html
       input.set "komment:#{staty}:num#{n}:text", "#{params[:com_text]}"
       input.set "komment:#{staty}:num#{n}:login", "#{session[:login]}"
-      input.set "komment:#{staty}:num#{n}:time", "#{t0}"
+      input.set "komment:#{staty}:num#{n}:time", "#{t1}"
       #erb :antonacia
       in_basa(staty) 
     else
       n = get_kom.to_i
       n = n+1
+      x = params[:com_text]
+      t1 = Time.now
+      params[:com_text] = RedCloth.new("#{params[:com_text]}", [:filter_html]).to_html
       input.set "komment:#{staty}:kolvo", "#{n}"
       input.set "komment:#{staty}:num#{n}:text", "#{params[:com_text]}"
       input.set "komment:#{staty}:num#{n}:login", "#{session[:login]}"
-      input.set "komment:#{staty}:num#{n}:time", "#{t0}"
+      input.set "komment:#{staty}:num#{n}:time", "#{t1}"
       #erb :antonacia
       in_basa(staty) 
     end    
@@ -261,13 +265,13 @@ def in_massiv(staty1)
     #создаем массивы
     @arr_text = Array.new
     @arr_login = Array.new
-    #@arr_time = Array.new(k)
+    @arr_time = Array.new
     #заполняем их
     i = 0
       while i <= @k do
       @arr_text.push(in_mas.get"komment:#{staty1}:num#{i}:text")
       @arr_login.push(in_mas.get"komment:#{staty1}:num#{i}:login")
-      #@arr_time.push(in_mas.get"komment:#{staty1}:num#{i}:time")
+      @arr_time.push(in_mas.get"komment:#{staty1}:num#{i}:time")
       i = i+1
       end
   end
