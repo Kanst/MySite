@@ -17,7 +17,7 @@ def connect_redis
 end
 
 def get_title(title = @title)  
-  if @title == nil
+  if @title == nil 
    @title1 = 'Страница не найдена'
       erb :ru_404  
   end 
@@ -209,6 +209,8 @@ def input_komment(staty)
   if params[:comments]
     input = connect_redis
     get_kom = input.get "komment:#{staty}:kolvo"
+    t = Time.now
+    t1 = t.getlocal("+04:00")
     if get_kom == nil 
       input.set "komment:#{staty}:kolvo", "0"
       n = 0;
