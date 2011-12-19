@@ -214,7 +214,7 @@ def input_komment(staty)
     if get_kom == nil 
       input.set "komment:#{staty}:kolvo", "0"
       n = 0;
-      t1 = Time.now
+      
       params[:com_text] = RedCloth.new("#{params[:com_text]}", [:filter_html]).to_html
       input.set "komment:#{staty}:num#{n}:text", "#{params[:com_text]}"
       input.set "komment:#{staty}:num#{n}:login", "#{session[:login]}"
@@ -225,7 +225,7 @@ def input_komment(staty)
       n = get_kom.to_i
       n = n+1
       x = params[:com_text]
-      t1 = Time.now
+      
       params[:com_text] = RedCloth.new("#{params[:com_text]}", [:filter_html]).to_html
       input.set "komment:#{staty}:kolvo", "#{n}"
       input.set "komment:#{staty}:num#{n}:text", "#{params[:com_text]}"
